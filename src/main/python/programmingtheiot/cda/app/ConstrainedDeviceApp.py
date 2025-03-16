@@ -1,3 +1,5 @@
+#export PYTHONPATH=python-components/src/main/python/
+
 import logging
 
 from time import sleep
