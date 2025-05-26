@@ -44,28 +44,40 @@ class SystemPerformanceManager(object):
 		self.dataMsgListener = None
 
 		self.scheduler=BackgroundScheduler()
-		self.scheduler.add_job(self.handleTelemetry,'interval',seconds=self.pollRate)
+		self.scheduler.add_job( \
+			self.handleTelemetry,'interval',seconds=self.pollRate, \
+			max_instances=2, coalesce=True, misfire_grace_time=15)
 
 		self.cpuUtilTask=SystemCpuUtilTask()
 		self.memUtilTask=SystemMemUtilTask()
 
 	def handleTelemetry(self):
-		cpuUtilPct=self.cpuUtilTask.getTelemetryValue()
-		memUtilPct=self.memUtilTask.getTelemetryValue()
+		self.cpuUtilPct=self.cpuUtilTask.getTelemetryValue()
+		self.memUtilPct=self.memUtilTask.getTelemetryValue()
 
-		logging.debug('CPU utilization is %s percent, and memory utilization is %s percent.',str(cpuUtilPct),str(memUtilPct))
-		
+		logging.debug('CPU utilization is %s percent, and memory utilization is %s percent.',str(self.cpuUtilPct),str(self.memUtilPct))
+
+		sysPerfData=SystemPerformanceData()
+		sysPerfData.setLocationID(self.locationID)
+		sysPerfData.setCpuUtilization(self.cpuUtilPct)
+		sysPerfData.setMemoryUtilization(self.memUtilPct)
+
+		if self.dataMsgListener:
+			self.dataMsgListener.handleSystemPerformanceMessage(data=sysPerfData)
+			
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
-		pass
+		if listener:
+			self.dataMsgListener=listener
 	
 	def startManager(self):
 		logging.info("Started SystemPerformanceManager.")
-		
+
 		if not self.scheduler.running:
 			self.scheduler.start()
 			logging.info("Started SystemPerformanceManager.")
 		else:
 			logging.warning("SystemPerformanceManager scheduler already started. Ignoring.")
+
 
 	def stopManager(self):
 		logging.info("Stopped SystemPerformanceManager.")
