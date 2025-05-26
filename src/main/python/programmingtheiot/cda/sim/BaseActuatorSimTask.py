@@ -29,7 +29,7 @@ class BaseActuatorSimTask():
 		self.simpleName = simpleName
 		self.lastKnownCommand = ConfigConst.DEFAULT_COMMAND
 		self.lastKnownValue = ConfigConst.DEFAULT_VAL
-		
+			
 	def getLatestActuatorResponse(self) -> ActuatorData:
 		"""
 		This can return the current ActuatorData response instance or a copy.
@@ -40,6 +40,15 @@ class BaseActuatorSimTask():
 		pass
 	
 	def updateActuator(self, data: ActuatorData) -> ActuatorData:
+		"""
+		NOTE: If 'data' is valid, the actuator-specific work can be delegated
+		as follows:
+		 - if command is ON: call self._activateActuator()
+		 - if command is OFF: call self._deactivateActuator()
+		
+		Both of these methods will have a generic implementation (logging only) within
+		this base class, although the sub-class may override if preferable.
+		"""
 		if data and self.typeID == data.getTypeID():
 			statusCode = ConfigConst.DEFAULT_STATUS
 
@@ -84,7 +93,6 @@ class BaseActuatorSimTask():
 				return actuatorResponse
 
 		return None
-
 		
 	def _activateActuator(self, val: float = ConfigConst.DEFAULT_VAL, stateData: str = None) -> int:
 		"""
