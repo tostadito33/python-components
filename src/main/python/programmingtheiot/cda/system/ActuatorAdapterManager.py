@@ -86,7 +86,7 @@ class ActuatorAdapterManager(object):
 		if listener:
 			self.dataMsgListener = listener
 
-	def  _initEnvironmentalActuationTasks(self):
+	def _initEnvironmentalActuationTasks(self):
 		if not self.useEmulator:
 			# load the environmental tasks for simulated actuation
 			self.humidifierActuator=HumidifierActuatorSimTask()

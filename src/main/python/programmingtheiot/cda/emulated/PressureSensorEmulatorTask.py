@@ -22,7 +22,7 @@ class PressureSensorEmulatorTask(BaseSensorSimTask):
 	
 	"""
 
-	def __init__(self, dataSet = None):
+	def __init__(self):
 		super( \
 			PressureSensorEmulatorTask, self).__init__( \
 				name = ConfigConst.PRESSURE_SENSOR_NAME, \
