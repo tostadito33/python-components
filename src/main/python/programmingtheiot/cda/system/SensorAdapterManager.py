@@ -1,12 +1,3 @@
-#####
-# 
-# This class is part of the Programming the Internet of Things project.
-# 
-# It is provided as a simple shell to guide the student and assist with
-# implementation for the Programming the Internet of Things exercises,
-# and designed to be modified by the student as needed.
-#
-
 import logging
 
 from importlib import import_module
@@ -30,6 +21,7 @@ class SensorAdapterManager(object):
 	"""
 
 	def __init__(self):
+		
 		self.configUtil = ConfigUtil()
 
 		self.pollRate     = \
@@ -60,6 +52,8 @@ class SensorAdapterManager(object):
 
 		# see PIOT-CDA-03-006 description for thoughts on the next line of code
 		self._initEnvironmentalSensorTasks()
+
+		
 
 	def handleTelemetry(self):
 		humidityData = self.humidityAdapter.generateTelemetry()
@@ -92,6 +86,7 @@ class SensorAdapterManager(object):
 		else:
 			logging.info("SensorAdapterManager scheduler already started. Ignoring.")
 			return False
+
 		
 	def stopManager(self):
 		logging.info("Stopped SensorAdapterManager.")
@@ -102,10 +97,10 @@ class SensorAdapterManager(object):
 		except:
 			logging.info("SensorAdapterManager scheduler already stopped. Ignoring.")
 			return False
-
+	
 	def _initEnvironmentalSensorTasks(self):
 		humidityFloor   = \
-			self.configUtil.getFloat( \
+		self.configUtil.getFloat( \
 				section = ConfigConst.CONSTRAINED_DEVICE, key = ConfigConst.HUMIDITY_SIM_FLOOR_KEY, defaultVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
 		humidityCeiling = \
 			self.configUtil.getFloat( \
@@ -154,3 +149,5 @@ class SensorAdapterManager(object):
 			teModule = import_module('programmingtheiot.cda.emulated.TemperatureSensorEmulatorTask', 'TemperatureSensorEmulatorTask')
 			teClazz = getattr(teModule, 'TemperatureSensorEmulatorTask')
 			self.tempAdapter = teClazz()
+		
+	
