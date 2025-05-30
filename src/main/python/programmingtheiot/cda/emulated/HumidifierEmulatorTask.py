@@ -59,4 +59,4 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
 		else:
 			logging.warning("No SenseHAT LED screen instance to clear / close.")
 			return -1
-	
+		
