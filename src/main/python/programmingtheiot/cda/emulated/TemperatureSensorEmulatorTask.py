@@ -22,7 +22,7 @@ class TemperatureSensorEmulatorTask(BaseSensorSimTask):
 	
 	"""
 
-	def __init__(self, dataSet = None):
+	def __init__(self):
 		super( \
 			TemperatureSensorEmulatorTask, self).__init__( \
 				name = ConfigConst.TEMP_SENSOR_NAME, \

@@ -64,7 +64,7 @@ class SensorAdapterManager(object):
 	def handleTelemetry(self):
 		humidityData = self.humidityAdapter.generateTelemetry()
 		pressureData = self.pressureAdapter.generateTelemetry()
-		tempData     = self.tempAdapter.generateTelemetry()
+		tempData = self.tempAdapter.generateTelemetry()
 
 		humidityData.setLocationID(self.locationID)
 		pressureData.setLocationID(self.locationID)
@@ -78,12 +78,13 @@ class SensorAdapterManager(object):
 			self.dataMsgListener.handleSensorMessage(humidityData)
 			self.dataMsgListener.handleSensorMessage(pressureData)
 			self.dataMsgListener.handleSensorMessage(tempData)
+
 		
-	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
+	def setDataMessageListener(self, listener: IDataMessageListener):
 		if listener:
 			self.dataMsgListener = listener
-	
-	def startManager(self):
+
+	def startManager(self) -> bool:
 		logging.info("Started SensorAdapterManager.")
 
 		if not self.scheduler.running:
@@ -92,8 +93,8 @@ class SensorAdapterManager(object):
 		else:
 			logging.info("SensorAdapterManager scheduler already started. Ignoring.")
 			return False
-		
-	def stopManager(self):
+
+	def stopManager(self) -> bool:
 		logging.info("Stopped SensorAdapterManager.")
 
 		try:
@@ -102,7 +103,7 @@ class SensorAdapterManager(object):
 		except:
 			logging.info("SensorAdapterManager scheduler already stopped. Ignoring.")
 			return False
-
+		
 	def _initEnvironmentalSensorTasks(self):
 		humidityFloor   = \
 			self.configUtil.getFloat( \
